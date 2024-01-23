@@ -12,6 +12,11 @@
         #updateForm {
             display: none;
         }
+
+        .pull-right {
+            float: left;
+            margin-right: 10px;
+        }
     </style>
     <title>Author Detail</title>
 </head>
@@ -39,39 +44,75 @@
             <td th:text="${author.password}"></td>
         </tr>
         <tr>
+            <td>권한</td>
+            <td th:text="${author.role}"></td>
+        </tr>
+        <tr>
             <td>가입시간</td>
             <td th:text="${author.createdTime}"></td>
         </tr>
     </table>
-    <div class="pull-right">
-        <button class="btn-primary" onclick="edit()">회원 정보 수정</button>
-    </div>
-
     <div>
-        <a class="btn-primary" th:href="@{|/author/delete/${author.id}|}">
-            회원 삭제
-        </a>
-    </div>
+        <div class="pull-right">
+            <button class="btn btn-primary" onclick="edit()">회원 정보 수정</button>
+        </div>
 
-<!--    <div id="updateForm">-->
-<!--        <form action="/member/update" method="post">-->
-<!--            <p>-->
-<!--                ID <input type="text" name="id" th:value="${member.id}" readonly>-->
-<!--            </p>-->
-<!--            <p>-->
-<!--                Name <input type="text" name="name" th:value="${member.name}">-->
-<!--            </p>-->
-<!--            <p>-->
-<!--                Email <input type="text" name="email" th:value="${member.email}" readonly>-->
-<!--            </p>-->
-<!--            <p>-->
-<!--                Password <input type="text" name="password" th:value="${member.password}">-->
-<!--            </p>-->
-<!--            <p>-->
-<!--                <input type="submit" value="수정 완료">-->
-<!--            </p>-->
-<!--        </form>-->
-<!--    </div>-->
+        <div class="pull-right">
+            <a class="btn btn-primary" th:href="@{|/author/delete/${author.id}|}">
+                회원 삭제
+            </a>
+        </div>
+    </div>
+    <br>
+    <div id="updateForm" class="mt-4">
+        <form th:action="@{|/author/${author.id}/update|}" method="post">
+            <div class="form-group">
+                <label for="id">
+                    ID
+                </label>
+                <input class="form-control" type="text" id="id" name="id" th:value="${author.id}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="name">
+                    Name
+                </label>
+                <input class="form-control" type="text" id="name" name="name" th:value="${author.name}">
+            </div>
+
+            <div class="form-group">
+                <label for="email">
+                    Email
+                </label>
+                <input class="form-control" type="text" id="email" name="email" th:value="${author.email}" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="password">
+                    Password
+                </label>
+                <input class="form-control" type="text" id="password" name="password" th:value="${author.password}">
+            </div>
+
+            <div class="form-group">
+                <label for="role">
+                    Role
+                </label>
+                <select class="form-control" id="role" name="role">
+                    <option>
+                        ==선택==
+                    </option>
+                    <option value="admin" selected="selected">
+                        관리자
+                    </option>
+                    <option value="user">
+                        일반유저
+                    </option>
+                </select>
+            </div>
+
+            <button class="btn btn-secondary mt-3 " type="submit">수정완료</button>
+        </form>
+    </div>
 
 </div>
 </body>
