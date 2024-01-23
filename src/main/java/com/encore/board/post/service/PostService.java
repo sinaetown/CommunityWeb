@@ -36,13 +36,16 @@ public class PostService {
 
     public PostDetailResDto findById(Long id){
         Post post = postRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("일치하는 ID의 게시글이 없어요!"));
-        PostDetailResDto postDetailResDto= new PostDetailResDto(post.getId(), post.getTitle(), post.getContents(), post.getCreatedTime());
+        PostDetailResDto postDetailResDto= new PostDetailResDto(post.getId(), post.getTitle(),
+                post.getContents(), post.getCreatedTime());
         return postDetailResDto;
     }
 
     public void update(PostUpdateReqDto postUpdateReqDto){
         Post post = postRepository.findById(postUpdateReqDto.getId()).orElseThrow(()->new EntityNotFoundException("일치하는 ID의 게시글이 없어요!"));
         post.update(postUpdateReqDto.getTitle(), postUpdateReqDto.getContents());
+        System.out.println(postUpdateReqDto.getTitle());
+        System.out.println(postUpdateReqDto.getContents());
         postRepository.save(post);
     }
 

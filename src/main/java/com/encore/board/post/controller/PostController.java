@@ -8,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class PostController {
@@ -16,6 +15,11 @@ public class PostController {
 
     public PostController(PostService postService) {
         this.postService = postService;
+    }
+
+    @GetMapping("/post/create")
+    public String postCreate(){
+        return "/post/post-create";
     }
 
     @PostMapping("/post/create")
@@ -37,17 +41,15 @@ public class PostController {
     }
 
     @PostMapping("/post/{id}/update")
-    @ResponseBody
     public String postUpdate(@PathVariable(value = "id") Long id, PostUpdateReqDto postUpdateReqDto) {
         postService.update(postUpdateReqDto);
-        return "Post updated";
+        return "redirect:/post/detail/"+id;
     }
 
     @GetMapping("/post/delete/{id}")
-    @ResponseBody
     public String postDelete(@PathVariable(value = "id") Long id) {
         postService.delete(id);
-        return "Post deleted";
+        return "redirect:/post/list";
     }
 
 }
