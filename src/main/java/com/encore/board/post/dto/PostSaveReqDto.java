@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 public class PostSaveReqDto {
     private String title;
     private String contents;
+    private String email;
     private LocalDateTime createdTime;
     private LocalDateTime updatedTime;
 }

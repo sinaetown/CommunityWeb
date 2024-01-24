@@ -10,10 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class AuthorService {
     private final AuthorRepository authorRepository;
 
@@ -24,7 +26,7 @@ public class AuthorService {
 
     public void save(AuthorSaveReqDto authorSaveReqDto) {
         Author.Role role = null;
-        if (authorSaveReqDto.getRole() == null ||authorSaveReqDto.getRole().equals("user")) {
+        if (authorSaveReqDto.getRole() == null || authorSaveReqDto.getRole().equals("user")) {
             role = Author.Role.USER;
         } else {
             role = Author.Role.ADMIN;
@@ -40,14 +42,31 @@ public class AuthorService {
                 .name(authorSaveReqDto.getName())
                 .email(authorSaveReqDto.getEmail())
                 .password(authorSaveReqDto.getPassword())
+                .role(role)
                 .build();
+
+//        Cascade.PERSIST 옵션 테스트
+//        부모테이블을 통해 자식테이블에 객체를 동시에 생성
+//        List<Post> posts = new ArrayList<>();
+//        Post post = Post.builder()
+//                .title(author.getName() + "님 회원가입을 축하드립니다! :D")
+//                .contents("반갑습니다!")
+//                .author(author)
+//                .build();
+//
+//        posts.add(post);
+//        author.setPosts(posts);
         authorRepository.save(author);
     }
 
     public List<AuthorListResDto> findAll() {
         List<AuthorListResDto> authorListResDtos = new ArrayList<>();
         for (Author author : authorRepository.findAll()) {
-            AuthorListResDto authorListResDto = new AuthorListResDto(author.getId(), author.getName(), author.getEmail());
+
+            AuthorListResDto authorListResDto = AuthorListResDto.builder()
+                    .id(author.getId())
+                    .name(author.getName())
+                    .email(author.getEmail()).build();
             authorListResDtos.add(authorListResDto);
         }
         return authorListResDtos;
@@ -61,11 +80,17 @@ public class AuthorService {
         } else {
             role = "관리자";
         }
-        AuthorDetailResDto authorDetailResDto = new AuthorDetailResDto(author.getId(), author.getName(),
-                author.getEmail(), author.getPassword(), role, author.getCreatedTime());
+        AuthorDetailResDto authorDetailResDto = AuthorDetailResDto.builder()
+                .id(author.getId())
+                .name(author.getName())
+                .email(author.getEmail())
+                .password(author.getPassword())
+                .role(role)
+                .counts(author.getPosts().size())
+                .createdTime(author.getCreatedTime())
+                .build();
         return authorDetailResDto;
     }
-
 
     public void update(AuthorUpdateReqDto authorUpdateReqDto) {
         Author author = authorRepository.findById(authorUpdateReqDto.getId()).orElseThrow(() -> new EntityNotFoundException("일치하는 ID의 회원이 없어요!"));
@@ -76,7 +101,9 @@ public class AuthorService {
             role = Author.Role.USER;
         }
         author.update(authorUpdateReqDto.getName(), authorUpdateReqDto.getPassword(), role);
-        authorRepository.save(author);
+//        명시적으로 save를 하지 않더라도, JPA의 영속성 컨텍스트를 통해 객체에 변경이 감지되면 (dirty check)
+//       트랜잭션이 완료되는 시점에 save가 동작한다
+//        authorRepository.save(author);
     }
 
     public void delete(Long id) {

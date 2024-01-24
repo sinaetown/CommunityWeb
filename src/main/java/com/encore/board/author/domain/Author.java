@@ -1,5 +1,6 @@
 package com.encore.board.author.domain;
 
+import com.encore.board.post.domain.Post;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -33,6 +35,14 @@ public class Author {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+//    author 조회 시, Post객체가 필요할 시에 선언
+//    mappedBy에 연관관계의 주인(FK를 관리하는)의 변수명을 명시 <-> '부모' 객체와는 개념적 구별 필요
+//    일반적으로 부모 객체에서 Cascade 옵션을 걺
+//    Cascade와 dirty check는 다름 : 변경사항을 체크하는 게 dirty check
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    @Setter //Cascade.PERSIST를 위한 테스트
+    private List<Post> posts;
+
     @CreationTimestamp
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdTime;
@@ -48,11 +58,12 @@ public class Author {
     @Builder
 //    @Buildr를 통해 빌더 패턴으로 객체 생성
 //    매개변수의 세팅 순서와 매개변수의 개수 등을 유연하게 세팅할 수 있음
-    public Author(String name, String email, String password, Role role) {
+    public Author(String name, String email, String password, Role role, List<Post> posts) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.role = role;
+        this.posts = posts;
     }
 
     public void update(String name, String password, Role role) {
