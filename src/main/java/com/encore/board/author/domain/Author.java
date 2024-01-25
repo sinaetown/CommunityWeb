@@ -39,6 +39,7 @@ public class Author {
 //    mappedBy에 연관관계의 주인(FK를 관리하는)의 변수명을 명시 <-> '부모' 객체와는 개념적 구별 필요
 //    일반적으로 부모 객체에서 Cascade 옵션을 걺
 //    Cascade와 dirty check는 다름 : 변경사항을 체크하는 게 dirty check
+//    cf)1:1 관계일 경우, @OneToOne도 존재
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //    @Setter //Cascade.PERSIST를 위한 테스트
     private List<Post> posts;

@@ -66,13 +66,14 @@ public class AuthorService {
             AuthorListResDto authorListResDto = AuthorListResDto.builder()
                     .id(author.getId())
                     .name(author.getName())
-                    .email(author.getEmail()).build();
+                    .email(author.getEmail())
+                    .build();
             authorListResDtos.add(authorListResDto);
         }
         return authorListResDtos;
     }
 
-    public AuthorDetailResDto findById(Long id) throws EntityNotFoundException {
+    public Author findById(Long id) throws EntityNotFoundException {
         Author author = authorRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("일치하는 ID의 회원이 없어요!"));
         String role = null;
         if (author.getRole() == null || author.getRole().equals("user")) {
@@ -80,13 +81,34 @@ public class AuthorService {
         } else {
             role = "관리자";
         }
+//        AuthorDetailResDto authorDetailResDto = AuthorDetailResDto.builder()
+//                .id(author.getId())
+//                .name(author.getName())
+//                .email(author.getEmail())
+//                .password(author.getPassword())
+//                .role(role)
+//                .counts(author.getPosts().size())
+//                .createdTime(author.getCreatedTime())
+//                .build();
+//        return authorDetailResDto;
+        return author;
+    }
+
+    public AuthorDetailResDto findAuthorDetail(Long id) throws EntityNotFoundException {
+        Author author = authorRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("검색하신 ID의 Member가 없습니다."));
+        String role = null;
+        if (author.getRole() == null || author.getRole().equals(Author.Role.USER)) {
+            role = "일반 유저";
+        } else {
+            role = "관리자";
+        }
         AuthorDetailResDto authorDetailResDto = AuthorDetailResDto.builder()
                 .id(author.getId())
-                .name(author.getName())
                 .email(author.getEmail())
-                .password(author.getPassword())
+                .name(author.getName())
                 .role(role)
                 .counts(author.getPosts().size())
+                .password(author.getPassword())
                 .createdTime(author.getCreatedTime())
                 .build();
         return authorDetailResDto;
