@@ -31,9 +31,15 @@ public class AuthorController {
     }
 
     @PostMapping("/author/create")
-    public String authorSave(AuthorSaveReqDto authorSaveReqDto) {
-        authorService.save(authorSaveReqDto);
-        return "redirect:/author/list";
+    public String authorSave(AuthorSaveReqDto authorSaveReqDto, Model model) {
+        try {
+            authorService.save(authorSaveReqDto);
+            return "redirect:/author/list";
+
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "/author/author-create";
+        }
     }
 
     @GetMapping("/author/list")
@@ -59,29 +65,29 @@ public class AuthorController {
     }
 
     @PostMapping("/author/{id}/update")
-    public String authorUpdate(@PathVariable (value="id") Long id, AuthorUpdateReqDto authorUpdateReqDto){
+    public String authorUpdate(@PathVariable(value = "id") Long id, AuthorUpdateReqDto authorUpdateReqDto) {
         authorService.update(authorUpdateReqDto);
-        return "redirect:/author/detail/"+id;
+        return "redirect:/author/detail/" + id;
     }
 
     @GetMapping("/author/delete/{id}")
-    public String authorDelete(@PathVariable (value="id") Long id){
+    public String authorDelete(@PathVariable(value = "id") Long id) {
         authorService.delete(id);
         return "redirect:/author/list";
     }
 
-//    엔티티 순환참조 이슈 테스트
+    //    엔티티 순환참조 이슈 테스트
 //    연관관계가 있는 Author엔티티를 json으로 직렬화를 하게될 경우,
 //    순환참조 이슈가 발생하므로 DTO가 필요하다
     @GetMapping("/author/{id}/circle/entity")
     @ResponseBody
-    public Author circleEntity(@PathVariable (value="id") Long id){
+    public Author circleEntity(@PathVariable(value = "id") Long id) {
         return authorService.findById(id);
     }
 
     @GetMapping("/author/{id}/circle/dto")
     @ResponseBody
-    public AuthorDetailResDto circleDto(@PathVariable (value="id") Long id){
+    public AuthorDetailResDto circleDto(@PathVariable(value = "id") Long id) {
         return authorService.findAuthorDetail(id);
     }
 

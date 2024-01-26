@@ -23,7 +23,7 @@
                 <label for="title">
                     제목
                 </label>
-                <textarea class="form-control" id="title" name="title"></textarea>
+                <textarea class="form-control" id="title" name="title" required></textarea>
             </div>
 
             <div class="form-group">
@@ -31,19 +31,48 @@
                     내용
                 </label>
                 <textarea class="form-control" id="contents" name="contents"
-                          style="width: 1100px; height:300px"></textarea>
+                          style="width: 1100px; height:300px" required></textarea>
             </div>
             <div class="form-group">
                 <label for="author_email">
                     작성자 이메일
                 </label>
                 <input class="form-control" id="author_email" name="email"
-                          style="width: 400px;">
+                       style="width: 400px;">
             </div>
-            <button class="btn btn-secondary mt-3" type="submit" >게시글 등록하기</button>
+
+
+            <div class="form-group">
+                예약 게시글 설정
+                <div>
+                    <input type="radio" id="appointment_yes" name="appointment" value="yes">
+                    <label for="appointment_yes">예약 ㅇ</label>
+                </div>
+                <div>
+                    <input type="radio" id="appointment_no" name="appointment" value="no" checked>
+                    <label for="appointment_no">예약 x</label>
+                </div>
+            </div>
+            <div>
+                <label for="appointmentTime">
+                    예약 시간 설정
+                </label>
+                <input type="datetime-local" id="appointmentTime" name="appointmentTime">
+            </div>
+
+            <button class="btn btn-secondary mt-3" type="submit">게시글 등록하기</button>
         </div>
     </form>
+    <div th:if="${errorMessage != null}">
+        <input type="hidden" id="error" th:value="${errorMessage}"/>
+    </div>
 </div>
 
 </body>
+<script>
+    let errorMsg = document.getElementById("error").value;
+    if (errorMsg) {
+        alert(errorMsg);
+    }
+</script>
 </html>

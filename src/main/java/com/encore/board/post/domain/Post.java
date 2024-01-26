@@ -1,6 +1,7 @@
 package com.encore.board.post.domain;
 
 import com.encore.board.author.domain.Author;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,10 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor
+
+@Builder
+@AllArgsConstructor
+
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +27,9 @@ public class Post {
 
     @Column(length = 3000, nullable = false)
     private String contents;
+
+    private String appointment;
+    private LocalDateTime appointmentTime;
 
 //    post 객체 입장에서는 한 사람이 여러 글을 쓸 수 있음
     @ManyToOne(fetch = FetchType.LAZY)
@@ -50,5 +58,9 @@ public class Post {
     public void update(String title, String contents){
         this.title = title;
         this.contents = contents;
+    }
+
+    public void updateAppointment(){
+        this.appointment = null;
     }
 }
