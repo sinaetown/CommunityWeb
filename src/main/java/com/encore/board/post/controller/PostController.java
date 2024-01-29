@@ -4,6 +4,7 @@ import com.encore.board.post.dto.PostListResDto;
 import com.encore.board.post.dto.PostSaveReqDto;
 import com.encore.board.post.dto.PostUpdateReqDto;
 import com.encore.board.post.service.PostService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 @Controller
+@Slf4j
 public class PostController {
     private final PostService postService;
 
@@ -36,6 +38,7 @@ public class PostController {
             return "redirect:/post/list";
         } catch (IllegalArgumentException e) {
             model.addAttribute("errorMessage", e.getMessage());
+            log.error(e.getMessage());
             return "/post/post-create";
         }
 

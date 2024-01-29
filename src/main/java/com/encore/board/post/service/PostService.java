@@ -42,7 +42,7 @@ public class PostService {
             if (appointedTime.isBefore(LocalDateTime.now())) {
                 throw new IllegalArgumentException("시간 정보 잘못 입력");
             }
-            appointment="yes";
+            appointment = "yes";
         }
         Post post = Post.builder()
                 .title(postSaveReqDto.getTitle())

@@ -76,7 +76,8 @@ public class AuthorService {
     }
 
     public Author findById(Long id) throws EntityNotFoundException {
-        Author author = authorRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("일치하는 ID의 회원이 없어요!"));
+        Author author = authorRepository.findById(id).orElseThrow(()
+                -> new EntityNotFoundException("(authorService) 일치하는 ID의 회원이 없어요!"));
         String role = null;
         if (author.getRole() == null || author.getRole().equals("user")) {
             role = "일반 유저";

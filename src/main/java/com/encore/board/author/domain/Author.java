@@ -35,7 +35,7 @@ public class Author {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-//    author 조회 시, Post객체가 필요할 시에 선언
+    //    author 조회 시, Post객체가 필요할 시에 선언
 //    mappedBy에 연관관계의 주인(FK를 관리하는)의 변수명을 명시 <-> '부모' 객체와는 개념적 구별 필요
 //    일반적으로 부모 객체에서 Cascade 옵션을 걺
 //    Cascade와 dirty check는 다름 : 변경사항을 체크하는 게 dirty check
@@ -56,6 +56,7 @@ public class Author {
         ADMIN,
         USER
     }
+
     @Builder
 //    @Buildr를 통해 빌더 패턴으로 객체 생성
 //    매개변수의 세팅 순서와 매개변수의 개수 등을 유연하게 세팅할 수 있음
