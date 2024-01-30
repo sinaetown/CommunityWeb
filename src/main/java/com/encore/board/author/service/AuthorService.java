@@ -7,6 +7,7 @@ import com.encore.board.author.dto.AuthorSaveReqDto;
 import com.encore.board.author.dto.AuthorUpdateReqDto;
 import com.encore.board.author.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -18,10 +19,13 @@ import java.util.List;
 @Transactional
 public class AuthorService {
     private final AuthorRepository authorRepository;
+    private final PasswordEncoder passwordEncoder;
+
 
     @Autowired
-    public AuthorService(AuthorRepository authorRepository) {
+    public AuthorService(AuthorRepository authorRepository, PasswordEncoder passwordEncoder) {
         this.authorRepository = authorRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public void save(AuthorSaveReqDto authorSaveReqDto) throws IllegalArgumentException {
@@ -43,7 +47,7 @@ public class AuthorService {
         Author author = Author.builder()
                 .name(authorSaveReqDto.getName())
                 .email(authorSaveReqDto.getEmail())
-                .password(authorSaveReqDto.getPassword())
+                .password(passwordEncoder.encode(authorSaveReqDto.getPassword()))
                 .role(role)
                 .build();
 
@@ -96,6 +100,10 @@ public class AuthorService {
 //        return authorDetailResDto;
         return author;
     }
+
+//    public Author findByEmail(String email){
+//        Author author = authorRepository.findByEmail(email).orElseThrow(()->new EntityNotFoundException("no!"))
+//    }
 
     public AuthorDetailResDto findAuthorDetail(Long id) throws EntityNotFoundException {
         Author author = authorRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("검색하신 ID의 Member가 없습니다."));
