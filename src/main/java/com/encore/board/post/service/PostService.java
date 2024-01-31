@@ -11,8 +11,6 @@ import com.encore.board.post.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -35,7 +33,7 @@ public class PostService {
     }
 
     public void save(PostSaveReqDto postSaveReqDto, String email) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 //        String email = authentication.getName();
         Author author = authorRepository.findByEmail(email).orElse(null);
         LocalDateTime appointedTime = null;
