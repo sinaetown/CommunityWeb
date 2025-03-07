@@ -1,4 +1,4 @@
-# Spring Boot와 Thymeleaf 기반 게시판
+# Spring Boot&Thymeleaf 기반 게시판
 
 ## 📌 프로젝트 개요
 - Spring Boot와 Thymeleaf를 기반으로하는 게시판 웹사이트
